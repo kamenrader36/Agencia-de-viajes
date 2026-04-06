@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.travelagency.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class TravelAgencyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(TravelAgencyApplication.class, args);
 	}
 
 }
