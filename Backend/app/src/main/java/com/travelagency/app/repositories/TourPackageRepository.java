@@ -12,7 +12,6 @@ import java.util.List;
 public interface TourPackageRepository extends JpaRepository<TourPackage, Long>{
 
     List<TourPackage> findByDestination(String destination);
-    List<TourPackage> findByLessOrEqualPrice(Double amount);
+    List<TourPackage> findByPriceLessThanEqual(Double price);
 
-    List<TourPackage> findByTourStatus(String tourStatus);
 }
