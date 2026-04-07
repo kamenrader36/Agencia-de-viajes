@@ -34,8 +34,8 @@ public class User {
     @Column(nullable = false, unique = true, length = 320)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(unique = true, nullable = false)
+    private String keycloak;
 
     @Column(length = 25)
     private String phoneNumber;
