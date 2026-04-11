@@ -28,6 +28,9 @@ public class User {
     @Column(unique = true, nullable = false)
     private Long userId;
     
+    @Column(unique = true, nullable = false)
+    private String username;
+
     @Column(nullable = false, length = 80)
     private String fullName;
 
@@ -47,7 +50,7 @@ public class User {
     private String nationality;
 
     @Column(nullable = false)
-    private Boolean activeUser = false;
+    private Boolean activeUser = true;
 
     @Column(nullable = false)
     private String role;

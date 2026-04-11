@@ -1,6 +1,6 @@
 package com.travelagency.app.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,7 +30,7 @@ public class Booking {
     private Long bookingId;
 
     @Column(nullable = false)
-    private LocalDate bookingDate;
+    private LocalDateTime bookingDate;
 
     @Column(nullable = false)
     private int howManyPeople;

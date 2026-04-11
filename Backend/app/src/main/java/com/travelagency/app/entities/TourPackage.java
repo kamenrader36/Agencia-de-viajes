@@ -39,10 +39,10 @@ public class TourPackage {
     private String description;
 
     @Column(nullable = false)
-    private LocalDate starDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDate enDate;
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private Double price;
@@ -57,7 +57,7 @@ public class TourPackage {
     private String season;
 
     @Column(nullable = false, length = 10)
-    private String tourStatus = "AVAILABLE";
+    private String tourStatus = "PENDING";
 
     @ToString.Exclude
     @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)

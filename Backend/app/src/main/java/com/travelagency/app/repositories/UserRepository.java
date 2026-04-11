@@ -9,7 +9,11 @@ import com.travelagency.app.entities.User;
 @Repository
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    Boolean existsByEmail(String email);
+
+    Boolean existsByKeycloak(String keycloak);
     
-    User findByKeycloak(String keycload);
+    User findByKeycloak(String keycloak);
     User findByEmail(String email);
 }
