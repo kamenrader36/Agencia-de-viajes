@@ -25,7 +25,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>{
 
     int countByUserAndBookingStatus(User user, String status);
 
-    List<Booking> findByDateBetweenAndStatusNot(LocalDateTime start, LocalDateTime end, String status);
+    List<Booking> findByBookingDateBetweenAndBookingStatusNot(LocalDateTime start, LocalDateTime end, String status);
 
     @Query("SELECT b.tourPackage.name as packageName," +
     "COUNT(b) AS totalBookings, " +

@@ -43,7 +43,7 @@ public class UserService {
         return userToLook;
     }
 
-    public User updatUser(User newUser, String userKeycloak) throws Exception{
+    public User updateUser(User newUser, String userKeycloak) throws Exception{
 
         User oldUser = findByKeycloak(userKeycloak);
         
