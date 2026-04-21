@@ -1,22 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import keycloak from './security/keycloak'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
 
-keycloak.init({ 
-    onLoad: 'login-required',
-    checkLoginIframe: false 
-}).then((authenticated) => {
 
-    if (authenticated) {
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './services/keycloak';
 
-        ReactDOM.createRoot(document.getElementById('root')).render(
-            <React.StrictMode>
-                <App />
-            </React.StrictMode>
-        )
-    }
-}).catch((error) => {
-    console.error("4. Error detectado:", error);
-});
+ReactDOM.createRoot(document.getElementById('root')).render(
+
+<ReactKeycloakProvider 
+    authClient={keycloak} 
+    initOptions={{ onLoad: 'login-required' }} // ¡Volvemos al candado total!
+>
+    <App />
+  </ReactKeycloakProvider>
+);

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class ReportController {
     @Autowired
     ReportService reportService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/sales")
     public ResponseEntity<List<ReportOfSalesDTO>> getReportOfSales(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end) {
 
@@ -37,6 +39,7 @@ public class ReportController {
         return ResponseEntity.ok(report);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/ranking")
     public ResponseEntity<List<ReportRankingDTO>> getReportRanking(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end){
 

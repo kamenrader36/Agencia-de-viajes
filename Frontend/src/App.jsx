@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
 
 const Home = () => (
   <div>
@@ -18,14 +19,21 @@ const Reports = () => (
 function App() {
   return (
     <BrowserRouter>
-      {/* El Navbar queda fuera de las Routes para que siempre sea visible */}
       <Navbar />
-      
-      {/* Contenedor principal para dar un poco de margen al contenido */}
-      <div style={{ padding: '20px' }}>
+      <div className="main-content">
         <Routes>
+          {}
           <Route path="/" element={<Home />} />
-          <Route path="/reports" element={<Reports />} />
+
+          {}
+          <Route 
+            path="/reports" 
+            element={
+              <PrivateRoute roleRequired="ADMIN">
+                <Reports />
+              </PrivateRoute>
+            } 
+          />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,17 +1,13 @@
-import { Link } from "react-router-dom";
-import keycloak from "../security/keycloak";
+import { Link } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 
-const navbar = () => {
-  const username = keycloak.tokenParsed?.preferred_username || "User";
+const Navbar = () => {
+    const { keycloak, initialized } = useKeycloak();
 
-  return (
-    <nav style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            padding: '1rem 2rem', 
-            backgroundColor: '#2c3e50', 
-            color: 'white' 
+    return (
+        <nav style={{ 
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '1rem 2rem', backgroundColor: '#2c3e50', color: 'white' 
         }}>
             <div>
                 <h2 style={{ margin: 0 }}>TravelAgency</h2>
@@ -21,27 +17,23 @@ const navbar = () => {
                 <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
                 <Link to="/reports" style={{ color: 'white', textDecoration: 'none' }}>Reports</Link>
                 
-                <span style={{ marginLeft: '15px', fontWeight: 'bold' }}>
-                    Welcome, {username}
-                </span>
-                
-                <button 
-                    onClick={() => keycloak.logout()}
-                    style={{ 
-                        padding: '8px 15px', 
-                        cursor: 'pointer', 
-                        backgroundColor: '#e74c3c', 
-                        color: 'white', 
-                        border: 'none', 
-                        borderRadius: '4px',
-                        marginLeft: '10px'
-                    }}
-                >
-                    Logout
-                </button>
+                {}
+                {initialized && keycloak.authenticated && (
+                    <>
+                        <span style={{ marginLeft: '15px', fontWeight: 'bold' }}>
+                            Welcome, {keycloak.tokenParsed?.preferred_username}
+                        </span>
+                        <button 
+                            onClick={() => keycloak.logout({ redirectUri: 'http://localhost:8008' })}
+                            style={{ padding: '8px 15px', cursor: 'pointer', backgroundColor: '#e74c3c', color: 'white', border: 'none', borderRadius: '4px' }}
+                        >
+                            Logout
+                        </button>
+                    </>
+                )}
             </div>
         </nav>
     );
 };
 
-export default navbar;
+export default Navbar;

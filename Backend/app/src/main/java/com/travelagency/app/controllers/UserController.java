@@ -2,6 +2,7 @@ package com.travelagency.app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(@RequestParam String keycloak) throws Exception{
 
@@ -31,6 +33,7 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/save")
     public ResponseEntity<User> saveUser(@RequestBody User user) throws Exception{
 
