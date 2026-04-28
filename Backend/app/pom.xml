@@ -70,6 +70,8 @@
 	</dependencies>
 
 	<build>
+		<finalName>travel_agency_backend</finalName>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
