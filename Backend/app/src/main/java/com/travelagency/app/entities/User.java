@@ -2,11 +2,11 @@ package com.travelagency.app.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,38 +24,35 @@ import lombok.ToString;
 
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long userId;
+    @Column(name = "id_usuario",unique = true, nullable = false, length = 45)
+    private String userId;
     
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false, length = 80)
+    @Column(name = "fullname", nullable = false, length = 80)
     private String fullName;
 
-    @Column(nullable = false, unique = true, length = 320)
+    @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email;
 
-    @Column(unique = true, nullable = false)
-    private String keycloak;
-
-    @Column(length = 25)
+    @Column(name = "phone", length = 25)
     private String phoneNumber;
 
-    @Column(unique = true, length = 30)
+    @Column(name = "document_number", unique = true, length = 30)
     private String documentNumber;
 
-    @Column(length = 80)
+    @Column(name = "natoinality", length = 80)
     private String nationality;
 
-    @Column(nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean activeUser = true;
 
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false)
     private String role;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> bookings;
 }

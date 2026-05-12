@@ -25,33 +25,44 @@ public class UserService {
             throw new Exception("Error: The email already have an account");
         }
 
-        if(userRepository.existsByKeycloak(user.getKeycloak())){
+        if(userRepository.existsById(user.getUserId())){
             throw new Exception("Error: The user is already signin");
         }
 
         return userRepository.save(user);
     }
 
-    public User findByKeycloak(String keycloak) throws Exception{
+    public User findById(String user_id){
 
-        User userToLook = userRepository.findByKeycloak(keycloak);
-        
-        if(userToLook == null){
-            throw new Exception("Error: The user doesnt exists");
-        }
+        User user = userRepository.findByUserId(user_id);
 
-        return userToLook;
+        return user;
     }
 
-    public User updateUser(User newUser, String userKeycloak) throws Exception{
-
-        User oldUser = findByKeycloak(userKeycloak);
+    public User findByUsername(String username) throws Exception {
         
-        oldUser.setFullName(newUser.getFullName());
-        oldUser.setPhoneNumber(newUser.getPhoneNumber());
-        oldUser.setNationality(newUser.getNationality());
+        User user = userRepository.findByUsername(username);
+        
+        if(user == null){
+            throw new Exception("Error: The user doesn't exist");
+        }
 
-        return userRepository.save(oldUser);
+        return user;
+    }
+
+    public User updateUser(User userDetails) throws Exception {
+        User user = userRepository.findByUsername(userDetails.getUsername());
+
+        if(user == null){
+            throw new Exception("Error: The user doesn't exist");
+        }
+        user.setFullName(userDetails.getFullName());
+        user.setEmail(userDetails.getEmail());
+        user.setPhoneNumber(userDetails.getPhoneNumber());
+        user.setNationality(userDetails.getNationality());
+        user.setDocumentNumber(userDetails.getDocumentNumber());
+
+        return userRepository.save(user);
     }
 
     public User desactivateUser(User user){

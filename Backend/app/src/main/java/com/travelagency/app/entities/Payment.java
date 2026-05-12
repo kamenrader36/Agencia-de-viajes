@@ -24,22 +24,22 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(name = "payment_id", unique = true, nullable = false)
     private Long paymentId;
 
-    @Column(nullable = false)
+    @Column(name = "amount", nullable = false)
     private Double amountToPay;
 
-    @Column(nullable = false, length = 25)
+    @Column(name = "method", nullable = false, length = 25)
     private String methodUseToPay;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "transaction", nullable = false, length = 50)
     private String transaction;
 
-    @Column(nullable = false)
+    @Column(name = "date_of_paymnet", nullable = false)
     private LocalDateTime dateOfPayment;
 
-    @Column(nullable = false, length = 15)
+    @Column(name = "payment_status", nullable = false, length = 15)
     private String paymentStatus = "PENDING";
 
     @OneToOne(optional = false)

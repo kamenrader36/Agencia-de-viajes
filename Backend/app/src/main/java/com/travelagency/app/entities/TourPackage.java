@@ -3,6 +3,8 @@ package com.travelagency.app.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,40 +28,41 @@ public class TourPackage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(name = "tour_package_id", unique = true, nullable = false)
     private Long tourPackageId;
 
-    @Column(nullable = false, length = 250)
+    @Column(name = "name", nullable = false, length = 250)
     private String name;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "destination", nullable = false, length = 100)
     private String destination;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(nullable = false)
+    @Column(name = "capacity", nullable = false)
     private int capacity;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "trip_type", nullable = false, length = 50)
     private String tripType;
 
-    @Column(nullable = false, length = 15)
+    @Column(name = "season", nullable = false, length = 15)
     private String season;
 
-    @Column(nullable = false, length = 10)
+    @Column(name = "tourStatus", nullable = false, length = 10)
     private String tourStatus = "PENDING";
 
     @ToString.Exclude
     @OneToMany(mappedBy = "tourPackage", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> bookings;
 }

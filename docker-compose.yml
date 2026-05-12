@@ -1,16 +1,21 @@
 version: '3.8'
 
 services:
-
+ 
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: travel_agency_db
+      MYSQL_DATABASE: travel_agency
+      MYSQL_USER: travelAgency
+      MYSQL_PASSWORD: KamenKappa26@
     ports:
       - "3307:3306"
-
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - travel-network
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.0
@@ -24,29 +29,76 @@ services:
       - "8081:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
+    networks:
+      - travel-network
 
 
-  backend:
+  backend1: &backend_base
     image: eltorsileno/travel-backend:latest
-    container_name: travel-backend
-    ports:
-      - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/travel_agency_db?allowPublicKeyRetrieval=true&useSSL=false
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-    restart: on-failure  
+      - PORT=8090
+      - DB_URL=jdbc:mysql://mysql-db:3306/travel_agency
+      - DB_USER=travelAgency
+      - DB_PASSWORD=KamenKappa26@
+      - KEYCLOAK_ISSUER=http://localhost:8081/realms/travel-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/travel-realm/protocol/openid-connect/certs
     depends_on:
       - mysql-db
       - keycloak
+    networks:
+      - travel-network
 
-  frontend:
-    image: eltorsileno/travel-frontend:latest
-    container_name: travel-frontend
+  backend2:
+    <<: *backend_base
+  
+  backend3:
+    <<: *backend_base
+
+  nginx-backend:
+    image: nginx:alpine
+    container_name: nginx-backend
+    volumes:
+      - ./nginx-backend.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8008:80"
+      - "8090:8090"
     depends_on:
-      - backend
+      - backend1
+      - backend2
+      - backend3
+    networks:
+      - travel-network
+
+  frontend1: &frontend_base
+    image: eltorsileno/travel-frontend:latest
+    depends_on:
+      - nginx-backend
+    networks:
+      - travel-network
+
+  frontend2:
+    <<: *frontend_base
+
+  frontend3:
+    <<: *frontend_base
+
+  nginx-frontend:
+    image: nginx:alpine
+    container_name: nginx-frontend
+    volumes:
+      - ./nginx-frontend.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8070:80"
+    depends_on:
+      - frontend1
+      - frontend2
+      - frontend3
+    networks:
+      - travel-network
 
 volumes:
   keycloak_data:
+  db_data:
+
+networks:
+  travel-network:
+    driver: bridge

@@ -33,6 +33,7 @@ public class ReportService {
             .numberOfPassengers(avaliable.getHowManyPeople())
             .amountPaid(avaliable.getBookingPrice())
             .bookingStatus(avaliable.getBookingStatus())
+            .bookingId(avaliable.getBookingId())
             .build();
 
             reports.add(reportDto);

@@ -12,6 +12,7 @@ import com.travelagency.app.entities.Payment;
 import com.travelagency.app.repositories.BookingRepository;
 import com.travelagency.app.repositories.PaymentRepository;
 
+
 @Service
 
 public class PaymentService {
@@ -49,7 +50,7 @@ public class PaymentService {
 
         Payment savePayment = paymentRepository.save(newPayment);
 
-        bookingWhoIsGonnaBePay.setBookingStatus("CONFIRMED");
+        bookingWhoIsGonnaBePay.setBookingStatus("PAID");
         bookingRepository.save(bookingWhoIsGonnaBePay);
 
         PaymentDetailDTO detail = PaymentDetailDTO.builder()
@@ -62,4 +63,25 @@ public class PaymentService {
 
         return detail;
     }
+
+    public String processPayment(PaymentDTO paymentDTO) throws Exception {
+        
+        if (paymentDTO.getCardNumber() == null || paymentDTO.getCardNumber().length() < 15) {
+            throw new Exception("Transacción rechazada: Número de tarjeta inválido.");
+        }
+        if (paymentDTO.getCvv() == null || paymentDTO.getCvv().length() < 3) {
+            throw new Exception("Transacción rechazada: Código de seguridad inválido.");
+        }
+
+        Booking booking = bookingRepository.findByBookingId(paymentDTO.getBookingId());
+        if (booking == null) {
+            throw new Exception("Reserva no encontrada en el sistema.");
+        }
+
+        booking.setBookingStatus("AVAILABLE");
+        bookingRepository.save(booking);
+
+        return "Pago procesado exitosamente. Tu viaje está confirmado.";
+    }
 }
+

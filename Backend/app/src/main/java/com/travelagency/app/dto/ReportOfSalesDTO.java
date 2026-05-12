@@ -25,4 +25,6 @@ public class ReportOfSalesDTO {
     private double amountPaid;
 
     private String bookingStatus;
+
+    private long bookingId;
 }

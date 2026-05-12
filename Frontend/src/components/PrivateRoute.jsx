@@ -7,7 +7,6 @@ const PrivateRoute = ({ children, roleRequired }) => {
         return <div>Cargando seguridad...</div>;
     }
 
-    // El guardia interno: ¿Tienes el rol que pide esta pantalla?
     if (roleRequired && !keycloak.hasRealmRole(roleRequired)) {
         return (
             <div style={{ padding: '50px', textAlign: 'center' }}>

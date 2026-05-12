@@ -1,5 +1,6 @@
 package com.travelagency.app.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("api/reports")
-@CrossOrigin("*")
+@RequestMapping("/api/reports")
+@CrossOrigin(origins = "http://localhost:8070")
 
 public class ReportController {
 
@@ -29,25 +30,31 @@ public class ReportController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/sales")
-    public ResponseEntity<List<ReportOfSalesDTO>> getReportOfSales(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end) {
+    public ResponseEntity<List<ReportOfSalesDTO>> getReportOfSales(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
 
         if(start.isAfter(end)){
             return ResponseEntity.badRequest().build();
         }
 
-        List<ReportOfSalesDTO> report = reportService.generateReportOfSales(start, end);
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+        List<ReportOfSalesDTO> report = reportService.generateReportOfSales(startDateTime, endDateTime);
         return ResponseEntity.ok(report);
     }
     
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/ranking")
-    public ResponseEntity<List<ReportRankingDTO>> getReportRanking(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime end){
+    public ResponseEntity<List<ReportRankingDTO>> getReportRanking(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end){
 
         if(start.isAfter(end)){
             return ResponseEntity.badRequest().build();
         }
 
-        List<ReportRankingDTO> reportRanking = reportService.generateReportRanking(start, end);
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+        List<ReportRankingDTO> reportRanking = reportService.generateReportRanking(startDateTime, endDateTime);
         return ResponseEntity.ok(reportRanking);
     }
     

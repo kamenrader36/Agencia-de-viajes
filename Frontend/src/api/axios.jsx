@@ -1,7 +1,7 @@
 import axios from "axios";
-import keycloak from "../security/keycloak";
+import keycloak from "../services/keycloak";
 
-const api = axios.create({baseURL: 'http://localhost:8080/api'});
+const api = axios.create({baseURL: import.meta.env.VITE_API_BASE_URL});
 
 api.interceptors.request.use(
     (config) => {

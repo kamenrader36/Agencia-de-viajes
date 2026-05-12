@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot App",
+            "request": "launch",
+            "mainClass": "com.travelagency.app.AppApplication",
+            "env": {
+                "PORT": "8090",
+                "DB_URL": "jdbc:mysql://localhost:3306/travel_agency",
+                "DB_USER": "TravelAgency",
+                "DB_PASSWORD": "KamenKappa26@",
+                "JPA_DDL": "update",
+                "KEYCLOAK_ISSUER": "http://localhost:8080/realms/travel-realm"
+            }
+        }
+    ]
+}

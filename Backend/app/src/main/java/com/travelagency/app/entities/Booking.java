@@ -26,19 +26,19 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(name = "booking_id", unique = true, nullable = false)
     private Long bookingId;
 
-    @Column(nullable = false)
+    @Column(name = "booking_date", nullable = false)
     private LocalDateTime bookingDate;
 
-    @Column(nullable = false)
+    @Column(name = "how_many_people", nullable = false)
     private int howManyPeople;
 
-    @Column(nullable = false)
+    @Column(name = "booking_price", nullable = false)
     private double bookingPrice;
 
-    @Column(nullable = false, length = 10)
+    @Column(name = "booking_status", nullable = false, length = 10)
     private String bookingStatus = "PENDING";
 
     @ManyToOne(optional = false)

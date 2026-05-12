@@ -1,13 +1,11 @@
 package com.travelagency.app.services;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.travelagency.app.dto.TourPackageDTO;
 import com.travelagency.app.entities.TourPackage;
 import com.travelagency.app.repositories.BookingRepository;
 import com.travelagency.app.repositories.TourPackageRepository;
@@ -39,7 +37,7 @@ public class TourPackageService {
             throw new Exception("Error: The capacity is below or equal to zero");
         }
 
-        newPackage.setTourStatus("Available");
+        newPackage.setTourStatus("AVAILABLE");
 
         return tourRepository.save(newPackage);
     }
@@ -111,43 +109,27 @@ public class TourPackageService {
         return tourRepository.save(actualPackage);
     }
 
-    public List<TourPackageDTO> searchPackages(String destiny, Double maxPrice){
+    public List<TourPackage> search(String destination, Double maxPrice, String startDateStr) {
 
-        List<TourPackage> packages = tourRepository.findByTourStatusAndStartDateAfter("AVAILABLE", LocalDate.now());
-        List<TourPackageDTO> packageDTOs = new ArrayList<>();
+        LocalDate startDate = (startDateStr != null && !startDateStr.isEmpty()) 
+                            ? LocalDate.parse(startDateStr) 
+                            : null;
 
-        for(TourPackage packageInList : packages){
+        String dest = (destination != null && !destination.isEmpty()) ? destination : null;
 
-            if(destiny != null && !packageInList.getDestination().equalsIgnoreCase(destiny)){
-                continue;
-            }
-            if(maxPrice != null && packageInList.getPrice() > maxPrice){
-                continue;
-            }
+        return tourRepository.searchPackages(dest, maxPrice, startDate);
+    }
+    
 
-            int reservatioNumber = bookingRepo.countByTourPackage_TourPackageId(packageInList.getTourPackageId());
+    public TourPackage getPackageById(Long idPackage){
+        return tourRepository.findByTourPackageId(idPackage);
+    }
 
-            int availablePackage = packageInList.getCapacity() - reservatioNumber;
+    public List<TourPackage> getAllPackages() {
+        return tourRepository.findAll();
+    }
 
-            if(availablePackage > 0){
-
-                TourPackageDTO dtoPackage = TourPackageDTO.builder()
-                .tourPackageId(packageInList.getTourPackageId())
-                .name(packageInList.getName())
-                .destination(packageInList.getDestination())
-                .description(packageInList.getDescription())
-                .startDate(packageInList.getStartDate())
-                .endDate(packageInList.getEndDate())
-                .price(packageInList.getPrice())
-                .seatsAvailable(availablePackage)
-                .tripType(packageInList.getTripType())
-                .tourStatus(packageInList.getTourStatus())
-                .build();
-
-                packageDTOs.add(dtoPackage);
-            }
-        }
-
-        return packageDTOs;
+    public List<TourPackage> getAvailablePackages() {
+        return tourRepository.findByTourStatus("AVAILABLE");
     }
 }
