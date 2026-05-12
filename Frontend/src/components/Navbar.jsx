@@ -44,7 +44,7 @@ const Navbar = () => {
                             Welcome, {keycloak.tokenParsed?.preferred_username}
                         </span>
                         <button 
-                            onClick={() => keycloak.logout({ redirectUri: 'http://localhost:8070' })}
+                            onClick={() => keycloak.logout({ redirectUri: 'http://13.222.52.43:8070' })}
                             style={{ 
                                 padding: '8px 15px', 
                                 cursor: 'pointer', 

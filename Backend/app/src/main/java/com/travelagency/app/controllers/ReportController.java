@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/reports")
-@CrossOrigin(origins = "http://localhost:8070")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 
 public class ReportController {
 

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
- 
+
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
@@ -20,18 +20,20 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.0
     container_name: keycloak
-    command: start-dev --hostname-strict=false
+    command: start-dev --hostname-strict=false --hostname-strict-https=false
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME=13.222.52.43
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false  
     ports:
       - "8081:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
     networks:
       - travel-network
-
 
   backend1: &backend_base
     image: eltorsileno/travel-backend:latest
@@ -40,7 +42,7 @@ services:
       - DB_URL=jdbc:mysql://mysql-db:3306/travel_agency
       - DB_USER=travelAgency
       - DB_PASSWORD=KamenKappa26@
-      - KEYCLOAK_ISSUER=http://localhost:8081/realms/travel-realm
+      - KEYCLOAK_ISSUER=http://13.222.52.43:8081/realms/travel-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/travel-realm/protocol/openid-connect/certs
     depends_on:
       - mysql-db
@@ -48,11 +50,11 @@ services:
     networks:
       - travel-network
 
-  backend2:
-    <<: *backend_base
+  #backend2:
+    #<<: *backend_base
   
-  backend3:
-    <<: *backend_base
+  #backend3:
+    #<<: *backend_base
 
   nginx-backend:
     image: nginx:alpine
@@ -63,8 +65,8 @@ services:
       - "8090:8090"
     depends_on:
       - backend1
-      - backend2
-      - backend3
+      #- backend2
+      #- backend3
     networks:
       - travel-network
 
@@ -75,11 +77,11 @@ services:
     networks:
       - travel-network
 
-  frontend2:
-    <<: *frontend_base
+  #frontend2:
+    #<<: *frontend_base
 
-  frontend3:
-    <<: *frontend_base
+  #frontend3:
+    #<<: *frontend_base
 
   nginx-frontend:
     image: nginx:alpine
@@ -90,8 +92,8 @@ services:
       - "8070:80"
     depends_on:
       - frontend1
-      - frontend2
-      - frontend3
+      #- frontend2
+      #- frontend3
     networks:
       - travel-network
 
