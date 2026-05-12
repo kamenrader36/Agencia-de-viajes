@@ -1,0 +1,58 @@
+name: Frontend - CI/CD
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-front:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './Frontend/app/package-lock.json'
+
+      - name: Instalar dependencias y Construir
+        working-directory: ./Frontend/app
+        run: |
+          npm install
+          npm run build
+
+      - name: Subir Build como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: Frontend/app/dist 
+
+  docker-push-front:
+    runs-on: ubuntu-latest
+    needs: build-front
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Descargar Build generado
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: Frontend/app/dist
+
+      - name: Login en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Construir y Subir imagen Docker Front
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Frontend/app
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/travel-frontend:latest
