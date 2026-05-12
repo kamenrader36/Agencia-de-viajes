@@ -1,0 +1,30 @@
+{
+  "realm": "travel-realm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "travel-frontend-client",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "redirectUris": [
+        "http://13.222.52.43:8070/*"
+      ],
+      "webOrigins": [
+        "+"
+      ]
+    },
+    {
+      "clientId": "travel-backend-client",
+      "enabled": true,
+      "bearerOnly": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "attributes": {
+        "access.token.lifespan": "3600"
+      }
+    }
+  ]
+}

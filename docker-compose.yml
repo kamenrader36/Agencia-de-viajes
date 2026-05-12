@@ -18,20 +18,26 @@ services:
       - travel-network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0.0
+    image: quay.io/keycloak/keycloak:24.0.5
     container_name: keycloak
-    command: start-dev --hostname-strict=false --hostname-strict-https=false
+    command: start-dev --hostname-strict=false --import-realm
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_HOSTNAME=13.222.52.43
       - KC_HTTP_ENABLED=true
       - KC_HOSTNAME_STRICT=false
-      - KC_HOSTNAME_STRICT_HTTPS=false  
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_PROXY=edge
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://mysql-db:3306/travel_agency
+      - KC_DB_USERNAME=travelAgency
+      - KC_DB_PASSWORD=KamenKappa26@
     ports:
       - "8081:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
+      - ./travel-realm.json:/opt/keycloak/data/import/travel-realm.json
     networks:
       - travel-network
 
