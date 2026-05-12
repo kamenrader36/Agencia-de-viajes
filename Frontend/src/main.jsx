@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     initOptions={{ 
       onLoad: 'login-required',
       checkLoginIframe: false,
-      pkceMethod: 'S256'     
+      //pkceMethod: 'S256'     
     }}
   >
     <App />
